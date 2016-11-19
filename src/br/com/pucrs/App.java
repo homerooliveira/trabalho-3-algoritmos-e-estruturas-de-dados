@@ -42,16 +42,12 @@ public class App {
                         tree.add(line, secaoAtual);
                         break;
                     case "P":
-                        if (!(capituloAtual.isEmpty())) {
-                            if (!(secaoAtual.isEmpty())) {
-                                if (!(subSecaoAtual.isEmpty())) {
-                                    tree.add(line, subSecaoAtual);
-                                } else {
-                                    tree.add(line, secaoAtual);
-                                }
-                            } else {
-                                tree.add(line, capituloAtual);
-                            }
+                        if (!subSecaoAtual.isEmpty()) {
+                            tree.add(line, subSecaoAtual);
+                        } else if (!secaoAtual.isEmpty()) {
+                            tree.add(line, secaoAtual);
+                        } else {
+                            tree.add(line, capituloAtual);
                         }
                         break;
                 }
