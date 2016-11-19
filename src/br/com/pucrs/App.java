@@ -10,6 +10,12 @@ public class App {
     private static final String EMPTY = "";
 
     public static void main(String[] args) {
+        GeneralTree<String> tree = readFileAndCreateTree();
+        tree.positionsPre().forEach(System.out::println);
+
+    }
+
+    private static GeneralTree<String> readFileAndCreateTree() {
         GeneralTree<String> tree = new GeneralTree<>();
         String capituloAtual = EMPTY;
         String secaoAtual = EMPTY;
@@ -57,8 +63,7 @@ public class App {
             e.printStackTrace();
 
         }
-        tree.positionsPre().forEach(System.out::println);
-
+        return tree;
     }
 
 }
