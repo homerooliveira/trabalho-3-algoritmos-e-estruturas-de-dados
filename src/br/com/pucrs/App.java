@@ -1,20 +1,22 @@
 package br.com.pucrs;
 
-import javafx.print.Printer;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.Scanner;
 
 public class App {
-    private static final String EMPTY = "";
     private static final int NRO_DE_LINHAS_POR_PAGINAS = 15;
 
     public static void main(String[] args) {
-        GeneralTree<String> tree = readFileAndCreateTree();
+        GeneralTree<String> tree = new GeneralTree<>();
+        BookReader reader = new BookReader();
+        try {
+            tree = reader.readFile(Paths.get("livro.txt"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         tree.positionsPre().forEach(System.out::println);
         printBook(tree);
 
@@ -44,10 +46,10 @@ public class App {
                 if (position.startsWith("C")) {
                     if (capitloImpresso) {
                         nroPaginas++;
-                        System.out.println(String.format("------------------------------ Pg. %d", nroPaginas));
                         nroLinhas = 0;
                         nroSecoes = 0;
                         nroSubSecoes = 0;
+                        System.out.println(String.format("------------------------------ Pg. %d", nroPaginas));
                     }
                     capitloImpresso = true;
                     nroCapitulos++;
@@ -85,8 +87,10 @@ public class App {
 
                         if (nroLinhas == 15) {
                             nroPaginas++;
-                            System.out.println(String.format("------------------------------ Pg. %d", nroPaginas));
                             nroLinhas = 0;
+                            nroSecoes = 0;
+                            nroSubSecoes = 0;
+                            System.out.println(String.format("------------------------------ Pg. %d", nroPaginas));
                         }
                         paragrafos -= nroParagrafos;
                     }
@@ -95,8 +99,10 @@ public class App {
 
                 if (nroLinhas == 15) {
                     nroPaginas++;
-                    System.out.println(String.format("------------------------------ Pg. %d", nroPaginas));
                     nroLinhas = 0;
+                    nroSecoes = 0;
+                    nroSubSecoes = 0;
+                    System.out.println(String.format("------------------------------ Pg. %d", nroPaginas));
                 }
 
             }
@@ -119,59 +125,6 @@ public class App {
             }
         }
         System.out.println("------------------------------ Capa");
-    }
-
-    private static GeneralTree<String> readFileAndCreateTree() {
-        GeneralTree<String> tree = new GeneralTree<>();
-        String capituloAtual = EMPTY;
-        String secaoAtual = EMPTY;
-        String subSecaoAtual = EMPTY;
-
-        try (Scanner scanner = new Scanner(Files.newBufferedReader(Paths.get("livro.txt")))) {
-            while (scanner.hasNextLine()) {
-                String line = scanner.nextLine();
-                String tipo = line.substring(0, 2).trim();
-                switch (tipo) {
-                    case "L":
-                        tree.add(line, null);
-                        break;
-                    case "C":
-                        if (!(capituloAtual.isEmpty())) {
-                            secaoAtual = EMPTY;
-                            subSecaoAtual = EMPTY;
-                        }
-                        capituloAtual = line;
-                        tree.add(line, tree.getRoot());
-                        break;
-                    case "S":
-                        subSecaoAtual = EMPTY;
-                        secaoAtual = line;
-                        tree.add(line, capituloAtual);
-                        break;
-                    case "SS":
-                        subSecaoAtual = line;
-                        tree.add(line, secaoAtual);
-                        break;
-                    case "P":
-                        if (!subSecaoAtual.isEmpty()) {
-                            tree.add(line, subSecaoAtual);
-                        } else if (!secaoAtual.isEmpty()) {
-                            tree.add(line, secaoAtual);
-                        } else {
-                            tree.add(line, capituloAtual);
-                        }
-                        break;
-                    default:
-                        //não faz nada
-                        break;
-                }
-
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-
-        }
-        return tree;
     }
 
 }
