@@ -12,16 +12,20 @@ public class BookReader {
     private PageOfBook capituloAtual;
     private PageOfBook secaoAtual;
     private PageOfBook subSecaoAtual;
-    private int nroCapitulos = 0;
-    private int nroSecoes = 0;
-    private int nroSubSecoes = 0;
-    private int nroParagrafos = 0;
+    private int nroCapitulos;
+    private int nroSecoes;
+    private int nroSubSecoes;
+    private int nroParagrafos;
 
 
     public BookReader() {
         capituloAtual = null;
         secaoAtual = null;
         subSecaoAtual = null;
+        nroCapitulos = 0;
+        nroSecoes = 0;
+        nroSubSecoes = 0;
+        nroParagrafos = 0;
     }
 
     public GeneralTree<PageOfBook> readFile(Path path) throws IOException {
@@ -68,6 +72,7 @@ public class BookReader {
         nroCapitulos = 0;
         nroSecoes = 0;
         nroSubSecoes = 0;
+        nroParagrafos = 0;
     }
 
     private void addSubSection(GeneralTree<PageOfBook> tree, PageOfBook page) {

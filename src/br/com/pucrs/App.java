@@ -3,6 +3,7 @@ package br.com.pucrs;
 import br.com.pucrs.collections.GeneralTree;
 import br.com.pucrs.io.BookPrinter;
 import br.com.pucrs.io.BookReader;
+import br.com.pucrs.model.PageOfBook;
 
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -18,7 +19,7 @@ public class App {
 
         BookReader reader = new BookReader();
         BookPrinter printer = new BookPrinter();
-        GeneralTree<String> tree = new GeneralTree<>();
+        GeneralTree<PageOfBook> tree = new GeneralTree<>();
 
         try {
             tree = reader.readFile(Paths.get(args[0]));

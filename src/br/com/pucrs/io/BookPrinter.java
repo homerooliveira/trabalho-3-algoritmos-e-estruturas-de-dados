@@ -1,6 +1,7 @@
 package br.com.pucrs.io;
 
 import br.com.pucrs.collections.GeneralTree;
+import br.com.pucrs.model.PageOfBook;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -16,31 +17,33 @@ public class BookPrinter {
     private int nroSecoes = 0;
     private int nroSubSecoes = 0;
     private int nroLinhas = 0;
-    private boolean capitloImpresso = false;
+    private boolean fristChapter = true;
     private StringBuilder sumario = new StringBuilder("SUMÁRIO\n");
 
-    public void print(GeneralTree<String> tree, Path path) throws IOException {
-        List<String> positions = tree.positionsPre();
+    public void print(GeneralTree<PageOfBook> tree, Path path) throws IOException {
+        List<PageOfBook> positions = tree.positionsPre();
         if (!tree.isEmpty()) {
             try (PrintWriter printWriter = new PrintWriter(Files.newBufferedWriter(path))) {
 
-                String cover = positions.remove(0);
+                PageOfBook cover = positions.remove(0);
                 printCover(cover, printWriter);
 
-                for (String position : positions) {
-                    if (position.startsWith("C")) {
-                        printChapter(position, printWriter);
-                    } else if (position.substring(0, 2).equals("SS")) {
-                        printSubSection(position, printWriter);
-                    } else if (position.startsWith("S")) {
-                        printSection(position, printWriter);
-                    } else if (position.startsWith("P")) {
-                        printParagraph(position, printWriter);
+                for (PageOfBook position : positions) {
+                    switch (position.getType()) {
+                        case "C":
+                            printChapter(position, printWriter);
+                            break;
+                        case "S":
+                            printSection(position, printWriter);
+                            break;
+                        case "SS":
+                            printSubSection(position, printWriter);
+                            break;
+                        case "P":
+                            printParagraph(position, printWriter);
+                            break;
                     }
 
-                    if (nroLinhas == 15) {
-                        printPage(printWriter);
-                    }
 
                 }
 
@@ -54,8 +57,8 @@ public class BookPrinter {
 
     }
 
-    private void printParagraph(String position, PrintWriter printWriter) {
-        int paragrafos = Integer.parseInt(position.substring(2));
+    private void printParagraph(PageOfBook position, PrintWriter printWriter) {
+        int paragrafos = Integer.parseInt(position.getContent().trim());
         int paragrafoAtual = 0;
 
         while (paragrafos > 0) {
@@ -77,47 +80,60 @@ public class BookPrinter {
         }
     }
 
-    private void printSection(String position, PrintWriter printWriter) {
+    private void printSection(PageOfBook position, PrintWriter printWriter) {
         nroSecoes++;
         nroLinhas++;
-        printWriter.println(String.format("%2d  %d.%d %s", nroLinhas, nroCapitulos, nroSecoes, position));
+        printWriter.println(String.format("%2d  %d.%d %s",
+                nroLinhas, nroCapitulos, nroSecoes, position.getContent()));
         sumario.append(String.format("  %d.%d %s %d\n",
-                nroCapitulos, nroSecoes, position, nroPaginas + 1));
+                nroCapitulos, nroSecoes, position.getContent(), nroPaginas + 1));
+
+        if (nroLinhas == 15) {
+            printPage(printWriter);
+        }
+
     }
 
-    private void printSubSection(String position, PrintWriter printWriter) {
+    private void printSubSection(PageOfBook position, PrintWriter printWriter) {
         nroSubSecoes++;
         nroLinhas++;
         printWriter.println(String.format("%2d  %d.%d.%d %s",
-                nroLinhas, nroCapitulos, nroSecoes, nroSubSecoes, position));
+                nroLinhas, nroCapitulos, nroSecoes, nroSubSecoes, position.getContent()));
         sumario.append(String.format("   %d.%d.%d %s %d\n",
-                nroCapitulos, nroSecoes, nroSubSecoes, position, nroPaginas + 1));
-    }
+                nroCapitulos, nroSecoes, nroSubSecoes, position.getContent(), nroPaginas + 1));
 
-    private void printChapter(String position, PrintWriter printWriter) {
-        if (capitloImpresso) {
+        if (nroLinhas == 15) {
             printPage(printWriter);
         }
-        capitloImpresso = true;
+
+    }
+
+    private void printChapter(PageOfBook position, PrintWriter printWriter) {
+        if (!fristChapter) {
+            printPage(printWriter);
+        }
+        fristChapter = false;
         nroCapitulos++;
         nroLinhas++;
-        printWriter.println(String.format("%2d  %d. %s", nroLinhas, nroCapitulos, position));
-        sumario.append(String.format("%d. %s %d\n", nroCapitulos, position, nroPaginas + 1));
+        nroSecoes = 0;
+        nroSubSecoes = 0;
+        printWriter.println(String.format("%2d  %d. %s",
+                nroLinhas, nroCapitulos, position.getContent()));
+        sumario.append(String.format("%d. %s %d\n",
+                nroCapitulos, position.getContent(), nroPaginas + 1));
     }
 
     private void printPage(PrintWriter printWriter) {
         nroPaginas++;
         nroLinhas = 0;
-        nroSecoes = 0;
-        nroSubSecoes = 0;
         printWriter.println(String.format("------------------------------ Pg. %d", nroPaginas));
     }
 
-    private static void printCover(String position, PrintWriter printWriter) {
+    private static void printCover(PageOfBook cover, PrintWriter printWriter) {
         printWriter.println("------------------------------------- ");
         for (int i = 1; i <= NRO_DE_LINHAS_POR_PAGINAS; i++) {
             if (i == 7) {
-                printWriter.println(i + "            " + position);
+                printWriter.println(i + "            " + cover.getContent());
             } else {
                 printWriter.println(i);
             }
