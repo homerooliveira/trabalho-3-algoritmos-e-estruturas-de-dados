@@ -40,6 +40,8 @@ public class App {
                     nroPaginas++;
                     System.out.println(String.format("------------------------------ Pg. %d", nroPaginas));
                     nroLinhas = 0;
+                    nroSecoes = 0;
+                    nroSubSecoes = 0;
                 }
                 capitloImpresso = true;
                 nroCapitulos++;
@@ -57,33 +59,26 @@ public class App {
                 System.out.println(String.format("%2d  %d.%d %s", nroLinhas, nroCapitulos, nroSecoes, position));
             } else if (position.startsWith("P")) {
                 int paragrafos = Integer.parseInt(position.substring(2));
-                if (nroLinhas + paragrafos <= NRO_DE_LINHAS_POR_PAGINAS) {
-                    for (int j = 1; j < paragrafos + 1; j++) {
+                int paragrafoAtual = 0;
+
+                while (paragrafos > 0) {
+                    int nroParagrafos = NRO_DE_LINHAS_POR_PAGINAS - nroLinhas;
+                    if (paragrafos < nroParagrafos) {
+                        nroParagrafos = paragrafos;
+                    }
+
+                    for (int j = 0; j < nroParagrafos; j++) {
                         nroLinhas++;
-                        System.out.println(String.format("%2d  Lorem Ipsum %d", nroLinhas, j));
-                    }
-                } else {
-                    int paragrafoAtual = 0;
-
-                    while (paragrafos > 0) {
-                        int nroParagrafos = NRO_DE_LINHAS_POR_PAGINAS - nroLinhas;
-                        if (paragrafos < nroParagrafos) {
-                            nroParagrafos = paragrafos;
-                        }
-
-                        for (int j = 0; j < nroParagrafos; j++) {
-                            nroLinhas++;
-                            paragrafoAtual++;
-                            System.out.println(String.format("%2d  Lorem Ipsum %d", nroLinhas, paragrafoAtual));
-                        }
-                        if (nroLinhas == 15) {
-                            nroPaginas++;
-                            System.out.println(String.format("------------------------------ Pg. %d", nroPaginas));
-                            nroLinhas = 0;
-                        }
-                        paragrafos -= nroParagrafos;
+                        paragrafoAtual++;
+                        System.out.println(String.format("%2d  Lorem Ipsum %d", nroLinhas, paragrafoAtual));
                     }
 
+                    if (nroLinhas == 15) {
+                        nroPaginas++;
+                        System.out.println(String.format("------------------------------ Pg. %d", nroPaginas));
+                        nroLinhas = 0;
+                    }
+                    paragrafos -= nroParagrafos;
                 }
 
             }
@@ -95,7 +90,8 @@ public class App {
             }
 
         }
-
+        nroPaginas++;
+        System.out.println(String.format("------------------------------ Pg. %d", nroPaginas));
 
     }
 
