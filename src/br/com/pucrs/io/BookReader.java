@@ -1,6 +1,7 @@
 package br.com.pucrs.io;
 
 import br.com.pucrs.collections.GeneralTree;
+import br.com.pucrs.model.PageOfBook;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -8,10 +9,9 @@ import java.nio.file.Path;
 import java.util.Scanner;
 
 public class BookReader {
-    private static final String EMPTY = "";
-    private String capituloAtual;
-    private String secaoAtual;
-    private String subSecaoAtual;
+    private PageOfBook capituloAtual;
+    private PageOfBook secaoAtual;
+    private PageOfBook subSecaoAtual;
     private int nroCapitulos = 0;
     private int nroSecoes = 0;
     private int nroSubSecoes = 0;
@@ -19,33 +19,34 @@ public class BookReader {
 
 
     public BookReader() {
-        capituloAtual = EMPTY;
-        secaoAtual = EMPTY;
-        subSecaoAtual = EMPTY;
+        capituloAtual = null;
+        secaoAtual = null;
+        subSecaoAtual = null;
     }
 
-    public GeneralTree<String> readFile(Path path) throws IOException {
-        GeneralTree<String> tree = new GeneralTree<>();
+    public GeneralTree<PageOfBook> readFile(Path path) throws IOException {
+        GeneralTree<PageOfBook> tree = new GeneralTree<>();
 
         try (Scanner scanner = new Scanner(Files.newBufferedReader(path))) {
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
                 String tipo = line.substring(0, 2).trim();
+                PageOfBook page = new PageOfBook(line.substring(2), tipo);
                 switch (tipo) {
                     case "L":
-                        tree.add(line, null);
+                        tree.add(page, null);
                         break;
                     case "C":
-                        addChapter(tree, line);
+                        addChapter(tree, page);
                         break;
                     case "S":
-                        addSection(tree, line);
+                        addSection(tree, page);
                         break;
                     case "SS":
-                        addSubSection(tree, line);
+                        addSubSection(tree, page);
                         break;
                     case "P":
-                        addParagraph(tree, line);
+                        addParagraph(tree, page);
                         break;
                     default:
                         //não faz nada
@@ -61,42 +62,42 @@ public class BookReader {
     }
 
     public void clear() {
-        capituloAtual = EMPTY;
-        secaoAtual = EMPTY;
-        subSecaoAtual = EMPTY;
+        capituloAtual = null;
+        secaoAtual = null;
+        subSecaoAtual = null;
         nroCapitulos = 0;
         nroSecoes = 0;
         nroSubSecoes = 0;
     }
 
-    private void addSubSection(GeneralTree<String> tree, String line) {
-        subSecaoAtual = line;
-        tree.add(line, secaoAtual);
+    private void addSubSection(GeneralTree<PageOfBook> tree, PageOfBook page) {
+        subSecaoAtual = page;
+        tree.add(subSecaoAtual, secaoAtual);
         nroSubSecoes++;
     }
 
-    private void addParagraph(GeneralTree<String> tree, String line) {
-        if (!subSecaoAtual.isEmpty()) {
-            tree.add(line, subSecaoAtual);
-        } else if (!secaoAtual.isEmpty()) {
-            tree.add(line, secaoAtual);
+    private void addParagraph(GeneralTree<PageOfBook> tree, PageOfBook page) {
+        if (subSecaoAtual != null) {
+            tree.add(page, subSecaoAtual);
+        } else if (secaoAtual != null) {
+            tree.add(page, secaoAtual);
         } else {
-            tree.add(line, capituloAtual);
+            tree.add(page, capituloAtual);
         }
         nroParagrafos++;
     }
 
-    private void addSection(GeneralTree<String> tree, String line) {
-        subSecaoAtual = EMPTY;
-        secaoAtual = line;
-        tree.add(line, capituloAtual);
+    private void addSection(GeneralTree<PageOfBook> tree, PageOfBook page) {
+        subSecaoAtual = null;
+        secaoAtual = page;
+        tree.add(secaoAtual, capituloAtual);
         nroSecoes++;
     }
 
-    private void addChapter(GeneralTree<String> tree, String line) {
-        if (!(capituloAtual.isEmpty())) {
-            secaoAtual = EMPTY;
-            subSecaoAtual = EMPTY;
+    private void addChapter(GeneralTree<PageOfBook> tree, PageOfBook line) {
+        if (capituloAtual != null) {
+            secaoAtual = null;
+            subSecaoAtual = null;
         }
         capituloAtual = line;
         tree.add(line, tree.getRoot());

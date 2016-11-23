@@ -3,7 +3,7 @@ package br.com.pucrs.model;
 
 import java.util.Objects;
 
-public class PageOfBook  {
+public class PageOfBook {
     private String content;
     private String type;
 
