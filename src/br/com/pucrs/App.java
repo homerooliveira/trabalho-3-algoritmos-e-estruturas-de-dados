@@ -1,6 +1,9 @@
 package br.com.pucrs;
 
+import javafx.print.Printer;
+
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -19,79 +22,90 @@ public class App {
 
     private static void printBook(GeneralTree<String> tree) {
         List<String> positions = tree.positionsPre();
-        if (!positions.isEmpty()) {
-            String cover = positions.remove(0);
-            printCover(cover);
-        }
+        try (PrintWriter printWriter = new PrintWriter(Files.newBufferedWriter(Paths.get("livro_prod.txt")))) {
 
-        int nroPaginas = 0;
-        int nroCapitulos = 0;
-        int nroSecoes = 0;
-        int nroSubSecoes = 0;
-        int nroLinhas = 0;
-        boolean capitloImpresso = false;
-        StringBuilder sumario = new StringBuilder("SUMÁRIO\n");
 
-        for (int i = 0; i < positions.size(); i++) {
-            String position = positions.get(i);
+            if (!positions.isEmpty()) {
+                String cover = positions.remove(0);
+                printCover(cover);
+            }
 
-            if (position.startsWith("C")) {
-                if (capitloImpresso) {
-                    nroPaginas++;
-                    System.out.println(String.format("------------------------------ Pg. %d", nroPaginas));
-                    nroLinhas = 0;
-                    nroSecoes = 0;
-                    nroSubSecoes = 0;
-                }
-                capitloImpresso = true;
-                nroCapitulos++;
-                nroLinhas++;
-                System.out.println(String.format("%2d  %d. %s", nroLinhas, nroCapitulos, position));
-                sumario.append(String.format("%2d  %d. %s", nroLinhas, nroCapitulos, position));
-            } else if (position.substring(0, 2).equals("SS")) {
-                nroSubSecoes++;
-                nroLinhas++;
-                System.out.println(String.format("%2d  %d.%d.%d %s",
-                        nroLinhas, nroCapitulos, nroSecoes, nroSubSecoes, position));
-            } else if (position.startsWith("S")) {
-                nroSecoes++;
-                nroLinhas++;
-                System.out.println(String.format("%2d  %d.%d %s", nroLinhas, nroCapitulos, nroSecoes, position));
-            } else if (position.startsWith("P")) {
-                int paragrafos = Integer.parseInt(position.substring(2));
-                int paragrafoAtual = 0;
+            int nroPaginas = 0;
+            int nroCapitulos = 0;
+            int nroSecoes = 0;
+            int nroSubSecoes = 0;
+            int nroLinhas = 0;
+            boolean capitloImpresso = false;
+            StringBuilder sumario = new StringBuilder("SUMÁRIO\n");
 
-                while (paragrafos > 0) {
-                    int nroParagrafos = NRO_DE_LINHAS_POR_PAGINAS - nroLinhas;
-                    if (paragrafos < nroParagrafos) {
-                        nroParagrafos = paragrafos;
-                    }
+            for (int i = 0; i < positions.size(); i++) {
+                String position = positions.get(i);
 
-                    for (int j = 0; j < nroParagrafos; j++) {
-                        nroLinhas++;
-                        paragrafoAtual++;
-                        System.out.println(String.format("%2d  Lorem Ipsum %d", nroLinhas, paragrafoAtual));
-                    }
-
-                    if (nroLinhas == 15) {
+                if (position.startsWith("C")) {
+                    if (capitloImpresso) {
                         nroPaginas++;
                         System.out.println(String.format("------------------------------ Pg. %d", nroPaginas));
                         nroLinhas = 0;
+                        nroSecoes = 0;
+                        nroSubSecoes = 0;
                     }
-                    paragrafos -= nroParagrafos;
+                    capitloImpresso = true;
+                    nroCapitulos++;
+                    nroLinhas++;
+                    System.out.println(String.format("%2d  %d. %s", nroLinhas, nroCapitulos, position));
+                    sumario.append(String.format("%d. %s %d\n", nroCapitulos, position, nroPaginas + 1));
+                } else if (position.substring(0, 2).equals("SS")) {
+                    nroSubSecoes++;
+                    nroLinhas++;
+                    System.out.println(String.format("%2d  %d.%d.%d %s",
+                            nroLinhas, nroCapitulos, nroSecoes, nroSubSecoes, position));
+                    sumario.append(String.format("   %d.%d.%d %s %d\n",
+                            nroCapitulos, nroSecoes, nroSubSecoes, position, nroPaginas + 1));
+                } else if (position.startsWith("S")) {
+                    nroSecoes++;
+                    nroLinhas++;
+                    System.out.println(String.format("%2d  %d.%d %s", nroLinhas, nroCapitulos, nroSecoes, position));
+                    sumario.append(String.format("  %d.%d %s %d\n",
+                            nroCapitulos, nroSecoes, position, nroPaginas + 1));
+                } else if (position.startsWith("P")) {
+                    int paragrafos = Integer.parseInt(position.substring(2));
+                    int paragrafoAtual = 0;
+
+                    while (paragrafos > 0) {
+                        int nroParagrafos = NRO_DE_LINHAS_POR_PAGINAS - nroLinhas;
+                        if (paragrafos < nroParagrafos) {
+                            nroParagrafos = paragrafos;
+                        }
+
+                        for (int j = 0; j < nroParagrafos; j++) {
+                            nroLinhas++;
+                            paragrafoAtual++;
+                            System.out.println(String.format("%2d  Lorem Ipsum %d", nroLinhas, paragrafoAtual));
+                        }
+
+                        if (nroLinhas == 15) {
+                            nroPaginas++;
+                            System.out.println(String.format("------------------------------ Pg. %d", nroPaginas));
+                            nroLinhas = 0;
+                        }
+                        paragrafos -= nroParagrafos;
+                    }
+
+                }
+
+                if (nroLinhas == 15) {
+                    nroPaginas++;
+                    System.out.println(String.format("------------------------------ Pg. %d", nroPaginas));
+                    nroLinhas = 0;
                 }
 
             }
-
-            if (nroLinhas == 15) {
-                nroPaginas++;
-                System.out.println(String.format("------------------------------ Pg. %d", nroPaginas));
-                nroLinhas = 0;
-            }
-
+            nroPaginas++;
+            System.out.println(String.format("------------------------------ Pg. %d", nroPaginas));
+            System.out.println(sumario.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        nroPaginas++;
-        System.out.println(String.format("------------------------------ Pg. %d", nroPaginas));
 
     }
 
