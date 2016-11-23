@@ -12,12 +12,16 @@ public class BookReader {
     private String capituloAtual;
     private String secaoAtual;
     private String subSecaoAtual;
+    private int nroCapitulos = 0;
+    private int nroSecoes = 0;
+    private int nroSubSecoes = 0;
+    private int nroParagrafos = 0;
+
 
     public BookReader() {
         capituloAtual = EMPTY;
         secaoAtual = EMPTY;
         subSecaoAtual = EMPTY;
-
     }
 
     public GeneralTree<String> readFile(Path path) throws IOException {
@@ -32,16 +36,16 @@ public class BookReader {
                         tree.add(line, null);
                         break;
                     case "C":
-                        readChapter(tree, line);
+                        addChapter(tree, line);
                         break;
                     case "S":
-                        readSection(tree, line);
+                        addSection(tree, line);
                         break;
                     case "SS":
-                        readSubSection(tree, line);
+                        addSubSection(tree, line);
                         break;
                     case "P":
-                        readParagraph(tree, line);
+                        addParagraph(tree, line);
                         break;
                     default:
                         //não faz nada
@@ -56,12 +60,22 @@ public class BookReader {
         return tree;
     }
 
-    private void readSubSection(GeneralTree<String> tree, String line) {
-        subSecaoAtual = line;
-        tree.add(line, secaoAtual);
+    public void clear() {
+        capituloAtual = EMPTY;
+        secaoAtual = EMPTY;
+        subSecaoAtual = EMPTY;
+        nroCapitulos = 0;
+        nroSecoes = 0;
+        nroSubSecoes = 0;
     }
 
-    private void readParagraph(GeneralTree<String> tree, String line) {
+    private void addSubSection(GeneralTree<String> tree, String line) {
+        subSecaoAtual = line;
+        tree.add(line, secaoAtual);
+        nroSubSecoes++;
+    }
+
+    private void addParagraph(GeneralTree<String> tree, String line) {
         if (!subSecaoAtual.isEmpty()) {
             tree.add(line, subSecaoAtual);
         } else if (!secaoAtual.isEmpty()) {
@@ -69,20 +83,39 @@ public class BookReader {
         } else {
             tree.add(line, capituloAtual);
         }
+        nroParagrafos++;
     }
 
-    private void readSection(GeneralTree<String> tree, String line) {
+    private void addSection(GeneralTree<String> tree, String line) {
         subSecaoAtual = EMPTY;
         secaoAtual = line;
         tree.add(line, capituloAtual);
+        nroSecoes++;
     }
 
-    private void readChapter(GeneralTree<String> tree, String line) {
+    private void addChapter(GeneralTree<String> tree, String line) {
         if (!(capituloAtual.isEmpty())) {
             secaoAtual = EMPTY;
             subSecaoAtual = EMPTY;
         }
         capituloAtual = line;
         tree.add(line, tree.getRoot());
+        nroCapitulos++;
+    }
+
+    public int getNroCapitulos() {
+        return nroCapitulos;
+    }
+
+    public int getNroSecoes() {
+        return nroSecoes;
+    }
+
+    public int getNroSubSecoes() {
+        return nroSubSecoes;
+    }
+
+    public int getNroParagrafos() {
+        return nroParagrafos;
     }
 }
