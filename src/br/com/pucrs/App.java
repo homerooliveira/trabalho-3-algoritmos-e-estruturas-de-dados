@@ -11,8 +11,9 @@ public class App {
 
     public static void main(String[] args) {
         if (args.length != 2) {
-            System.out.printf("Tem mais de dois argumentos!!");
+            System.out.println("Número de argumentos inválido.");
             System.out.println("Sintaxe: trabalho-3-algoritmos-e-estruturas-de-dados.jar [arquivo_entrada] [arquivo_saida]");
+            return;
         }
 
         BookReader reader = new BookReader();
@@ -29,7 +30,7 @@ public class App {
             System.out.println(" Parágrafos..: " + reader.getNroParagrafos());
             reader.clear();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Erro na leitura do arquivo " + args[0]);
         }
 
         try {
@@ -37,7 +38,7 @@ public class App {
             System.out.println("Gerando o sumário... ok");
             System.out.printf("Imprimindo o livro para o arquivo %s... ok.\n", args[1]);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Erro na escrita do arquivo " + args[1]);
         }
 
     }
