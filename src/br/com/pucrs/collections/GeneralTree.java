@@ -1,8 +1,7 @@
-package br.com.pucrs;
+package br.com.pucrs.collections;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class GeneralTree<E> {
 

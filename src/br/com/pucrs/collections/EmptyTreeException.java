@@ -1,4 +1,4 @@
-package br.com.pucrs;
+package br.com.pucrs.collections;
 
 public class EmptyTreeException extends RuntimeException {
 

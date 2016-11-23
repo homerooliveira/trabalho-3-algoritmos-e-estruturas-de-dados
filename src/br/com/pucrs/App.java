@@ -1,5 +1,9 @@
 package br.com.pucrs;
 
+import br.com.pucrs.collections.GeneralTree;
+import br.com.pucrs.io.BookPrinter;
+import br.com.pucrs.io.BookReader;
+
 import java.io.IOException;
 import java.nio.file.Paths;
 

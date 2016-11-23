@@ -1,4 +1,4 @@
-package br.com.pucrs;
+package br.com.pucrs.model;
 
 public class PageOfBook {
     private String content;

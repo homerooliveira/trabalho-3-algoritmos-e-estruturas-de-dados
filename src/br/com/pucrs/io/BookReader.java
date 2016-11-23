@@ -1,4 +1,6 @@
-package br.com.pucrs;
+package br.com.pucrs.io;
+
+import br.com.pucrs.collections.GeneralTree;
 
 import java.io.IOException;
 import java.nio.file.Files;
