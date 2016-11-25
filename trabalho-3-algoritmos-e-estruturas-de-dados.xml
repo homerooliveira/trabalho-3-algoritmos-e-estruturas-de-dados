@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="trabalho-3-algoritmos-e-estruturas-de-dados" default="all">
+  
+  
+
+  <!-- Uncomment the following property if no tests compilation is needed -->
+  <!-- 
+  <property name="skip.tests" value="true"/>
+   -->
+  
+  <!-- Compiler options -->
+  
+  <property name="compiler.debug" value="on"/>
+  <property name="compiler.generate.no.warnings" value="off"/>
+  <property name="compiler.args" value=""/>
+  <property name="compiler.max.memory" value="700m"/>
+  <patternset id="ignored.files">
+    <exclude name="**/*.hprof/**"/>
+    <exclude name="**/*.pyc/**"/>
+    <exclude name="**/*.pyo/**"/>
+    <exclude name="**/*.rbc/**"/>
+    <exclude name="**/*.yarb/**"/>
+    <exclude name="**/*~/**"/>
+    <exclude name="**/.DS_Store/**"/>
+    <exclude name="**/.git/**"/>
+    <exclude name="**/.hg/**"/>
+    <exclude name="**/.svn/**"/>
+    <exclude name="**/CVS/**"/>
+    <exclude name="**/__pycache__/**"/>
+    <exclude name="**/_svn/**"/>
+    <exclude name="**/vssver.scc/**"/>
+    <exclude name="**/vssver2.scc/**"/>
+  </patternset>
+  <patternset id="library.patterns">
+    <include name="*.egg"/>
+    <include name="*.jar"/>
+    <include name="*.ear"/>
+    <include name="*.swc"/>
+    <include name="*.war"/>
+    <include name="*.ane"/>
+    <include name="*.zip"/>
+  </patternset>
+  <patternset id="compiler.resources">
+    <exclude name="**/?*.java"/>
+    <exclude name="**/?*.form"/>
+    <exclude name="**/?*.class"/>
+    <exclude name="**/?*.groovy"/>
+    <exclude name="**/?*.scala"/>
+    <exclude name="**/?*.flex"/>
+    <exclude name="**/?*.kt"/>
+    <exclude name="**/?*.clj"/>
+    <exclude name="**/?*.aj"/>
+  </patternset>
+  
+  <!-- Modules -->
+  
+  
+  <!-- Module trabalho-3-algoritmos-e-estruturas-de-dados -->
+  
+  <dirname property="module.trabalho-3-algoritmos-e-estruturas-de-dados.basedir" file="${ant.file}"/>
+  
+  
+  
+  <property name="compiler.args.trabalho-3-algoritmos-e-estruturas-de-dados" value="-encoding UTF-8 -source 8 -target 8 ${compiler.args}"/>
+  
+  <property name="trabalho-3-algoritmos-e-estruturas-de-dados.output.dir" value="${module.trabalho-3-algoritmos-e-estruturas-de-dados.basedir}/out/production/trabalho-3-algoritmos-e-estruturas-de-dados"/>
+  <property name="trabalho-3-algoritmos-e-estruturas-de-dados.testoutput.dir" value="${module.trabalho-3-algoritmos-e-estruturas-de-dados.basedir}/out/test/trabalho-3-algoritmos-e-estruturas-de-dados"/>
+  
+  <path id="trabalho-3-algoritmos-e-estruturas-de-dados.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="trabalho-3-algoritmos-e-estruturas-de-dados.module.production.classpath"/>
+  
+  <path id="trabalho-3-algoritmos-e-estruturas-de-dados.runtime.production.module.classpath">
+    <pathelement location="${trabalho-3-algoritmos-e-estruturas-de-dados.output.dir}"/>
+  </path>
+
+  
+  <patternset id="excluded.from.module.trabalho-3-algoritmos-e-estruturas-de-dados">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.trabalho-3-algoritmos-e-estruturas-de-dados">
+    <patternset refid="excluded.from.module.trabalho-3-algoritmos-e-estruturas-de-dados"/>
+  </patternset>
+  
+  <path id="trabalho-3-algoritmos-e-estruturas-de-dados.module.sourcepath">
+    <dirset dir="${module.trabalho-3-algoritmos-e-estruturas-de-dados.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.trabalho-3-algoritmos-e-estruturas-de-dados" depends="compile.module.trabalho-3-algoritmos-e-estruturas-de-dados.production,compile.module.trabalho-3-algoritmos-e-estruturas-de-dados.tests" description="Compile module trabalho-3-algoritmos-e-estruturas-de-dados"/>
+  
+  <target name="compile.module.trabalho-3-algoritmos-e-estruturas-de-dados.production" description="Compile module trabalho-3-algoritmos-e-estruturas-de-dados; production classes">
+    <mkdir dir="${trabalho-3-algoritmos-e-estruturas-de-dados.output.dir}"/>
+    <javac destdir="${trabalho-3-algoritmos-e-estruturas-de-dados.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true">
+      <compilerarg line="${compiler.args.trabalho-3-algoritmos-e-estruturas-de-dados}"/>
+      <bootclasspath refid="trabalho-3-algoritmos-e-estruturas-de-dados.module.bootclasspath"/>
+      <classpath refid="trabalho-3-algoritmos-e-estruturas-de-dados.module.production.classpath"/>
+      <src refid="trabalho-3-algoritmos-e-estruturas-de-dados.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.trabalho-3-algoritmos-e-estruturas-de-dados"/>
+    </javac>
+    
+    <copy todir="${trabalho-3-algoritmos-e-estruturas-de-dados.output.dir}">
+      <fileset dir="${module.trabalho-3-algoritmos-e-estruturas-de-dados.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.trabalho-3-algoritmos-e-estruturas-de-dados.tests" depends="compile.module.trabalho-3-algoritmos-e-estruturas-de-dados.production" description="compile module trabalho-3-algoritmos-e-estruturas-de-dados; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.trabalho-3-algoritmos-e-estruturas-de-dados" description="cleanup module">
+    <delete dir="${trabalho-3-algoritmos-e-estruturas-de-dados.output.dir}"/>
+    <delete dir="${trabalho-3-algoritmos-e-estruturas-de-dados.testoutput.dir}"/>
+  </target>
+  
+  <target name="init" description="Build initialization">
+    <!-- Perform any build initialization in this target -->
+  </target>
+  
+  <target name="clean" depends="clean.module.trabalho-3-algoritmos-e-estruturas-de-dados" description="cleanup all"/>
+  
+  <target name="build.modules" depends="init, clean, compile.module.trabalho-3-algoritmos-e-estruturas-de-dados" description="build all modules"/>
+  
+  <target name="init.artifacts">
+    <property name="artifacts.temp.dir" value="${basedir}/__artifacts_temp"/>
+    <property name="artifact.output.trabalho-3-algoritmos-e-estruturas-de-dados:jar" value="${basedir}/out/artifacts/trabalho_3_algoritmos_e_estruturas_de_dados_jar"/>
+    <mkdir dir="${artifacts.temp.dir}"/>
+    <property name="temp.jar.path.trabalho-3-algoritmos-e-estruturas-de-dados.jar" value="${artifacts.temp.dir}/trabalho-3-algoritmos-e-estruturas-de-dados.jar"/>
+  </target>
+  
+  <target name="artifact.trabalho-3-algoritmos-e-estruturas-de-dados:jar" depends="init.artifacts, compile.module.trabalho-3-algoritmos-e-estruturas-de-dados" description="Build &#39;trabalho-3-algoritmos-e-estruturas-de-dados:jar&#39; artifact">
+    <property name="artifact.temp.output.trabalho-3-algoritmos-e-estruturas-de-dados:jar" value="${artifacts.temp.dir}/trabalho_3_algoritmos_e_estruturas_de_dados_jar"/>
+    <mkdir dir="${artifact.temp.output.trabalho-3-algoritmos-e-estruturas-de-dados:jar}"/>
+    <jar destfile="${temp.jar.path.trabalho-3-algoritmos-e-estruturas-de-dados.jar}" duplicate="preserve" filesetmanifest="mergewithoutmain">
+      <zipfileset dir="${trabalho-3-algoritmos-e-estruturas-de-dados.output.dir}"/>
+    </jar>
+    <copy file="${temp.jar.path.trabalho-3-algoritmos-e-estruturas-de-dados.jar}" tofile="${artifact.temp.output.trabalho-3-algoritmos-e-estruturas-de-dados:jar}/trabalho-3-algoritmos-e-estruturas-de-dados.jar"/>
+  </target>
+  
+  <target name="build.all.artifacts" depends="artifact.trabalho-3-algoritmos-e-estruturas-de-dados:jar" description="Build all artifacts">
+    <mkdir dir="${artifact.output.trabalho-3-algoritmos-e-estruturas-de-dados:jar}"/>
+    <copy todir="${artifact.output.trabalho-3-algoritmos-e-estruturas-de-dados:jar}">
+      <fileset dir="${artifact.temp.output.trabalho-3-algoritmos-e-estruturas-de-dados:jar}"/>
+    </copy>
+    
+    <!-- Delete temporary files -->
+    <delete dir="${artifacts.temp.dir}"/>
+  </target>
+  
+  <target name="all" depends="build.modules, build.all.artifacts" description="build all"/>
+</project>
