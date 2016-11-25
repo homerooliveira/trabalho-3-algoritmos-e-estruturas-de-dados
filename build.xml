@@ -137,7 +137,10 @@
   <target name="artifact.trabalho-3-algoritmos-e-estruturas-de-dados:jar" depends="init.artifacts, compile.module.trabalho-3-algoritmos-e-estruturas-de-dados" description="Build &#39;trabalho-3-algoritmos-e-estruturas-de-dados:jar&#39; artifact">
     <property name="artifact.temp.output.trabalho-3-algoritmos-e-estruturas-de-dados:jar" value="${artifacts.temp.dir}/trabalho_3_algoritmos_e_estruturas_de_dados_jar"/>
     <mkdir dir="${artifact.temp.output.trabalho-3-algoritmos-e-estruturas-de-dados:jar}"/>
-    <jar destfile="${temp.jar.path.trabalho-3-algoritmos-e-estruturas-de-dados.jar}" duplicate="preserve" filesetmanifest="mergewithoutmain">
+    <jar destfile="${temp.jar.path.trabalho-3-algoritmos-e-estruturas-de-dados.jar}" duplicate="preserve">
+      <manifest>
+         <attribute name="Main-Class" value="br/com/pucrs/App" />
+      </manifest>
       <zipfileset dir="${trabalho-3-algoritmos-e-estruturas-de-dados.output.dir}"/>
     </jar>
     <copy file="${temp.jar.path.trabalho-3-algoritmos-e-estruturas-de-dados.jar}" tofile="${artifact.temp.output.trabalho-3-algoritmos-e-estruturas-de-dados:jar}/trabalho-3-algoritmos-e-estruturas-de-dados.jar"/>
