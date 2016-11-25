@@ -7,6 +7,7 @@ deploy:
   api_key:
     secure: VNOpyXS8JXbaGMVyOqIDPP+HXtXHUw3rHVWZpUro8HRpy3CQ2D1SI+l9I5h8WAwN8FkT6a1/Gw/XI7dg2CmTANJyR2/ZUW8/4g3v5nNX4NzDeTahkR+eibl/3egDi7O/dclXUVqgzRzgXmdW6nhQuHs30mUfhqfYbEI6WT+EnFMfQYi6Q1gv/VNBQkwx7TU17WVImDboAXOXQtRCUsbCewpod76eWji2Cxakez1kRJrHvLaekFfCtL6otOikxlTrt4cJSiB1LVGA2QzY4xrNQNge5KVoJKbLDTObsmlQLmOpRXv43ynyvRwa1/ar+nbN3sqb/jDfg4pqZcUAHdV7xECgvjbJf12gznldHg/f2FmtZ4WyII7yLONNzShKdD/l4djGWDJKbOup+VSZAbMFSkCJzukOClqOYZ3fXicdlcndWsOvHeqAQAnQ2kKno23RvoU8AZqLXAA/h75KawDvuhP+ABjw9fUQbmupvWnsmF//bQn//QuDYUaTe1D1Z7wZ1JWp/iVYXwi45SUQTR3cDdN1FYbPEsdsHcGpL6bvFdxoh/yorZXy1xpo72s6LDfM0qnLL2QFihDGYeYGLph3q2yCltQODdexbzesWNUE+wqeThn/ZBWnVPyOPfJbf+z/5rTV81uT6EQa2m0Jl5nwdIY7SKCvJfr2Sdm49EdKZHw=
     file: out/trabalho_3_algoritmos_e_estruturas_de_dados_jar/trabalho-3-algoritmos-e-estruturas-de-dados.jar
+    skip_cleanup: true
   on:
     repo: homerooliveira/trabalho-3-algoritmos-e-estruturas-de-dados
     tags: true
