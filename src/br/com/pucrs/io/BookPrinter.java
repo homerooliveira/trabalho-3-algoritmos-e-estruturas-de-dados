@@ -48,7 +48,7 @@ public class BookPrinter {
                 }
 
                 printPage(printWriter);
-                printWriter.println(sumario.toString());
+                printWriter.print(sumario.toString());
 
             } catch (IOException e) {
                 throw new IOException(e.getMessage(), e);
@@ -73,7 +73,7 @@ public class BookPrinter {
                 printWriter.println(String.format("%2d  Lorem Ipsum %d", nroLinhas, paragrafoAtual));
             }
 
-            if (nroLinhas == 15) {
+            if (isLastLine()) {
                 printPage(printWriter);
             }
             paragrafos -= nroParagrafos;
@@ -85,13 +85,32 @@ public class BookPrinter {
         nroLinhas++;
         printWriter.println(String.format("%2d  %d.%d %s",
                 nroLinhas, nroCapitulos, nroSecoes, position.getContent()));
-        sumario.append(String.format("  %d.%d %s %d\n",
-                nroCapitulos, nroSecoes, position.getContent(), nroPaginas + 1));
+        String format = String.format("  %d.%d %s",
+                nroCapitulos, nroSecoes, position.getContent());
 
-        if (nroLinhas == 15) {
+        sumario.append(fillDots(format));
+
+        if (isLastLine()) {
             printPage(printWriter);
         }
 
+    }
+
+    private String fillDots(String format) {
+        StringBuilder builder = new StringBuilder(format);
+        if (builder.length() < 57) {
+            for (int i = builder.length(); i <= 57; i++) {
+                builder.append(".");
+            }
+        }
+        builder.append(" ");
+        builder.append(nroPaginas + 1);
+        builder.append("\n");
+        return builder.substring(0 );
+    }
+
+    private boolean isLastLine() {
+        return nroLinhas == 15;
     }
 
     private void printSubSection(PageOfBook position, PrintWriter printWriter) {
@@ -99,10 +118,12 @@ public class BookPrinter {
         nroLinhas++;
         printWriter.println(String.format("%2d  %d.%d.%d %s",
                 nroLinhas, nroCapitulos, nroSecoes, nroSubSecoes, position.getContent()));
-        sumario.append(String.format("   %d.%d.%d %s %d\n",
-                nroCapitulos, nroSecoes, nroSubSecoes, position.getContent(), nroPaginas + 1));
+        String format = String.format("   %d.%d.%d %s",
+                nroCapitulos, nroSecoes, nroSubSecoes, position.getContent());
+        sumario.append(fillDots(format));
 
-        if (nroLinhas == 15) {
+
+        if (isLastLine()) {
             printPage(printWriter);
         }
 
@@ -119,8 +140,9 @@ public class BookPrinter {
         nroSubSecoes = 0;
         printWriter.println(String.format("%2d  %d. %s",
                 nroLinhas, nroCapitulos, position.getContent()));
-        sumario.append(String.format("%d. %s %d\n",
-                nroCapitulos, position.getContent(), nroPaginas + 1));
+        String format = String.format("%d. %s",
+                nroCapitulos, position.getContent());
+        sumario.append(fillDots(format));
     }
 
     private void printPage(PrintWriter printWriter) {
