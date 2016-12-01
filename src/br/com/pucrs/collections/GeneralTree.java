@@ -5,7 +5,7 @@ import java.util.List;
 
 public class GeneralTree<E> {
 
-    private Node root;
+    private Node<E> root;
     private int count;
 
     public GeneralTree() {
@@ -50,7 +50,7 @@ public class GeneralTree<E> {
     }
 
     public E getFather(E element) {
-        Node n = searchNodeRef(element, root);
+        Node<E> n = searchNodeRef(element, root);
         if (n == null || n.father == null) {
             return null;
         } else {
@@ -63,13 +63,13 @@ public class GeneralTree<E> {
         return (nAux != null);
     }
 
-    private Node searchNodeRef(E element, Node target) {
-        Node res = null;
+    private Node<E> searchNodeRef(E element, Node<E> target) {
+        Node<E> res = null;
         if (target != null) {
             if (element.equals(target.element)) {
                 res = target;
             } else {
-                Node aux = null;
+                Node<E> aux = null;
                 int i = 0;
                 while ((aux == null) && (i < target.getSubtreesSize())) {
                     aux = searchNodeRef(element, target.getSubtree(i));
@@ -82,8 +82,8 @@ public class GeneralTree<E> {
     }
 
     public boolean add(E element, E father) {
-        Node n = new Node(element);
-        Node nAux = null;
+        Node<E> n = new Node<>(element);
+        Node<E> nAux = null;
         boolean res = false;
         if (father == null) {   // Insere na raiz
             if (root != null) { //Atualiza o pai da raiz
@@ -109,7 +109,7 @@ public class GeneralTree<E> {
         return lista;
     }
 
-    private void positionsPreAux(Node n, List<E> lista) {
+    private void positionsPreAux(Node<E> n, List<E> lista) {
         if (n != null) {
             lista.add(n.element);
             for (int i = 0; i < n.getSubtreesSize(); i++) {
@@ -118,11 +118,27 @@ public class GeneralTree<E> {
         }
     }
 
+    public List<E> positionsPos(){
+        List<E> list = new ArrayList<>();
+        positionsPosAux(root, list);
+        return list;
+    }
+
+    private void positionsPosAux(Node<E> node, List<E> list) {
+        if (node != null) {
+            for (int i = 0; i < node.getSubtreesSize(); i++) {
+                Node<E> subtree = node.getSubtree(i);
+                positionsPreAux(subtree, list);
+            }
+            list.add(node.element);
+        }
+    }
+
     public List<E> positionsWidth() {
         ArrayList<E> lista = new ArrayList<>();
 
-        Queue<Node> fila = new Queue<>();
-        Node atual;
+        Queue<Node<E>> fila = new Queue<>();
+        Node<E> atual;
 
         if (root != null) {
             fila.enqueue(root);
@@ -138,11 +154,11 @@ public class GeneralTree<E> {
     }
 
     // Classe interna Node
-    private class Node {
+    private static class Node<E> {
 
-        public Node father;
+        public Node<E> father;
         public E element;
-        public List<Node> subtrees;
+        public List<Node<E>> subtrees;
 
         public Node(E element) {
             father = null;
@@ -150,23 +166,23 @@ public class GeneralTree<E> {
             subtrees = new ArrayList<>();
         }
 
-        public Node(E element, Node father) {
+        public Node(E element, Node<E> father) {
             this.father = father;
             this.element = element;
             subtrees = new ArrayList<>();
         }
 
-        public void addSubtree(Node n) {
+        public void addSubtree(Node<E> n) {
             n.father = this;
             subtrees.add(n);
         }
 
-        public boolean removeSubtree(Node n) {
+        public boolean removeSubtree(Node<E> n) {
             n.father = null;
             return subtrees.remove(n);
         }
 
-        public Node getSubtree(int i) {
+        public Node<E> getSubtree(int i) {
             if ((i < 0) || (i >= subtrees.size())) {
                 throw new IndexOutOfBoundsException();
             }
