@@ -1,7 +1,7 @@
 package br.com.pucrs.io;
 
 import br.com.pucrs.collections.GeneralTree;
-import br.com.pucrs.model.PageBook;
+import br.com.pucrs.model.ContentBook;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -9,9 +9,9 @@ import java.nio.file.Path;
 import java.util.Scanner;
 
 public class BookReader {
-    private PageBook capituloAtual;
-    private PageBook secaoAtual;
-    private PageBook subSecaoAtual;
+    private ContentBook capituloAtual;
+    private ContentBook secaoAtual;
+    private ContentBook subSecaoAtual;
     private int nroCapitulos;
     private int nroSecoes;
     private int nroSubSecoes;
@@ -28,14 +28,14 @@ public class BookReader {
         nroParagrafos = 0;
     }
 
-    public GeneralTree<PageBook> readFile(Path path) throws IOException {
-        GeneralTree<PageBook> tree = new GeneralTree<>();
+    public GeneralTree<ContentBook> readFile(Path path) throws IOException {
+        GeneralTree<ContentBook> tree = new GeneralTree<>();
 
         try (Scanner scanner = new Scanner(Files.newBufferedReader(path))) {
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
                 String tipo = line.substring(0, 2).trim();
-                PageBook page = new PageBook(line.substring(2), tipo);
+                ContentBook page = new ContentBook(line.substring(2), tipo);
                 switch (tipo) {
                     case "L":
                         tree.add(page, null);
@@ -75,13 +75,13 @@ public class BookReader {
         nroParagrafos = 0;
     }
 
-    private void addSubSection(GeneralTree<PageBook> tree, PageBook page) {
+    private void addSubSection(GeneralTree<ContentBook> tree, ContentBook page) {
         subSecaoAtual = page;
         tree.add(subSecaoAtual, secaoAtual);
         nroSubSecoes++;
     }
 
-    private void addParagraph(GeneralTree<PageBook> tree, PageBook page) {
+    private void addParagraph(GeneralTree<ContentBook> tree, ContentBook page) {
         if (subSecaoAtual != null) {
             tree.add(page, subSecaoAtual);
         } else if (secaoAtual != null) {
@@ -92,14 +92,14 @@ public class BookReader {
         nroParagrafos++;
     }
 
-    private void addSection(GeneralTree<PageBook> tree, PageBook page) {
+    private void addSection(GeneralTree<ContentBook> tree, ContentBook page) {
         subSecaoAtual = null;
         secaoAtual = page;
         tree.add(secaoAtual, capituloAtual);
         nroSecoes++;
     }
 
-    private void addChapter(GeneralTree<PageBook> tree, PageBook line) {
+    private void addChapter(GeneralTree<ContentBook> tree, ContentBook line) {
         if (capituloAtual != null) {
             secaoAtual = null;
             subSecaoAtual = null;

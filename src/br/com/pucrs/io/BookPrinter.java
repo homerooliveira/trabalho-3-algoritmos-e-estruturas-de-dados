@@ -1,7 +1,7 @@
 package br.com.pucrs.io;
 
 import br.com.pucrs.collections.GeneralTree;
-import br.com.pucrs.model.PageBook;
+import br.com.pucrs.model.ContentBook;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -20,15 +20,15 @@ public class BookPrinter {
     private boolean firstChapter = true;
     private StringBuilder sumario = new StringBuilder("SUMÁRIO\n");
 
-    public void print(GeneralTree<PageBook> tree, Path path) throws IOException {
-        List<PageBook> positions = tree.positionsPre();
+    public void print(GeneralTree<ContentBook> tree, Path path) throws IOException {
+        List<ContentBook> positions = tree.positionsPre();
         if (!tree.isEmpty()) {
             try (PrintWriter printWriter = new PrintWriter(Files.newBufferedWriter(path))) {
 
-                PageBook cover = positions.remove(0);
+                ContentBook cover = positions.remove(0);
                 printCover(cover, printWriter);
 
-                for (PageBook position : positions) {
+                for (ContentBook position : positions) {
                     switch (position.getType()) {
                         case "C":
                             printChapter(position, printWriter);
@@ -46,7 +46,11 @@ public class BookPrinter {
 
 
                 }
-                printPage(printWriter);
+
+                if (nroLinhas > 0) {
+                    printPage(printWriter);
+                }
+
                 printWriter.print(sumario.toString());
 
             } catch (IOException e) {
@@ -56,7 +60,7 @@ public class BookPrinter {
 
     }
 
-    private void printParagraph(PageBook position, PrintWriter printWriter) {
+    private void printParagraph(ContentBook position, PrintWriter printWriter) {
         int paragrafos = Integer.parseInt(position.getContent().trim());
         int paragrafoAtual = 0;
 
@@ -79,7 +83,7 @@ public class BookPrinter {
         }
     }
 
-    private void printSection(PageBook position, PrintWriter printWriter) {
+    private void printSection(ContentBook position, PrintWriter printWriter) {
         nroSecoes++;
         nroLinhas++;
         printWriter.println(String.format("%2d  %d.%d %s",
@@ -112,7 +116,7 @@ public class BookPrinter {
         return nroLinhas == 15;
     }
 
-    private void printSubSection(PageBook position, PrintWriter printWriter) {
+    private void printSubSection(ContentBook position, PrintWriter printWriter) {
         nroSubSecoes++;
         nroLinhas++;
         printWriter.println(String.format("%2d  %d.%d.%d %s",
@@ -128,7 +132,7 @@ public class BookPrinter {
 
     }
 
-    private void printChapter(PageBook position, PrintWriter printWriter) {
+    private void printChapter(ContentBook position, PrintWriter printWriter) {
         if (!firstChapter) {
             printPage(printWriter);
         }
@@ -150,7 +154,7 @@ public class BookPrinter {
         printWriter.println(String.format("------------------------------ Pg. %d", nroPaginas));
     }
 
-    private static void printCover(PageBook cover, PrintWriter printWriter) {
+    private static void printCover(ContentBook cover, PrintWriter printWriter) {
         printWriter.println("------------------------------------- ");
         for (int i = 1; i <= NRO_DE_LINHAS_POR_PAGINAS; i++) {
             if (i == 7) {
