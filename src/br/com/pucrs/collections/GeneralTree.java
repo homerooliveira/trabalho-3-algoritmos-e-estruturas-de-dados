@@ -118,7 +118,7 @@ public class GeneralTree<E> {
         }
     }
 
-    public List<E> positionsPos(){
+    public List<E> positionsPos() {
         List<E> list = new ArrayList<>();
         positionsPosAux(root, list);
         return list;
@@ -153,12 +153,32 @@ public class GeneralTree<E> {
         return lista;
     }
 
+
+    private void toString(List<Node<E>> nodes, String indent, StringBuilder builder) {
+        for (Node<E> node : nodes) {
+            builder.append(String.format("%s %s", indent, node.element))
+                    .append("\n");
+            toString(node.subtrees, indent.concat(" |"), builder);
+        }
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        if (root != null) {
+            stringBuilder.append(root.element)
+                    .append("\n");
+            toString(root.subtrees, "|", stringBuilder);
+        }
+        return stringBuilder.toString();
+    }
+
     // Classe interna Node
     private static class Node<E> {
 
-        public Node<E> father;
-        public E element;
-        public List<Node<E>> subtrees;
+        Node<E> father;
+        E element;
+        List<Node<E>> subtrees;
 
         public Node(E element) {
             father = null;
@@ -192,6 +212,8 @@ public class GeneralTree<E> {
         public int getSubtreesSize() {
             return subtrees.size();
         }
+
+
     }
 
 }
