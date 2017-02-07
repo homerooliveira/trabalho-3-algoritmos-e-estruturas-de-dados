@@ -3,11 +3,11 @@ package br.com.pucrs.model;
 
 import java.util.Objects;
 
-public class PageBook {
+public class ContentBook {
     private String content;
     private String type;
 
-    public PageBook(String content, String type) {
+    public ContentBook(String content, String type) {
         this.content = content;
         this.type = type;
     }
@@ -24,7 +24,7 @@ public class PageBook {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        PageBook that = (PageBook) o;
+        ContentBook that = (ContentBook) o;
         return Objects.equals(content, that.content) &&
                 Objects.equals(type, that.type);
     }
@@ -32,5 +32,13 @@ public class PageBook {
     @Override
     public int hashCode() {
         return Objects.hash(content, type);
+    }
+
+    @Override
+    public String toString() {
+        return "ContentBook{" +
+                "content='" + content + '\'' +
+                ", type='" + type + '\'' +
+                '}';
     }
 }
